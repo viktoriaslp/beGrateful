@@ -78,7 +78,7 @@ struct NewEntry: View {
             
             // MARK: - Barra inferior con botones
             .toolbar {
-                ToolbarItem(placement: .bottomBar) {
+                ToolbarItem(placement: .keyboard) {
                     HStack {
                         // Cancelar
                         Button("Cancel", role: .destructive) {

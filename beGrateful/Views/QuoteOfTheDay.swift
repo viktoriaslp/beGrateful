@@ -29,11 +29,9 @@ struct QuoteOfTheDay: View {
                 Text(quote.text)
                     .font(.title3)
                     .multilineTextAlignment(.center)
+                    .foregroundColor(Color("fortexts"))
                     .padding()
-                    .background(.ultraThinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .shadow(radius: 4)
-                    .padding()
+                
             } else {
                 Text("No quotes available yet. Add some grateful memories!")
                     .italic()
@@ -41,29 +39,31 @@ struct QuoteOfTheDay: View {
                     .padding()
             }
         }
+        .padding(.bottom, 60)
         
-        .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                HStack {
-                    Button("New Quote") {
-                        // currentQuote = quotes.randomElement()
-                    }
-                    .padding()
-                    .background(Color("forbuttons"))
-                    .foregroundColor(.white)
-                    .clipShape(Capsule())
+        //.toolbar {
+        //    ToolbarItem(placement: .bottomBar) {
+        //        HStack {
+        //            Button("New Quote") {
+        //                // currentQuote = quotes.randomElement()
+        //            }
+        //            .padding()
+        //            .background(Color("forbuttons"))
+        //            .foregroundColor(.white)
+        //            .clipShape(Capsule())
                     
-                    Button("New Image") {
-                        randomImage = ImageHelper.getRandomImage()
-                    }
-                    .padding()
-                    .background(Color("forbuttons"))
-                    .foregroundColor(.white)
-                    .clipShape(Capsule())
-                }
-                .frame(maxWidth: .infinity)
-            }
-        }
+        //            Button("New Image") {
+        //                randomImage = ImageHelper.getRandomImage()
+        //            }
+        //            .padding()
+        //            .background(Color("forbuttons"))
+        //            .foregroundColor(.white)
+        //            .clipShape(Capsule())
+        //        }
+        //        .frame(maxWidth: .infinity)
+        //    }
+        //}
+        
         // TODO: Añadir un boton de descarga
         // TODO: Añadir boton para elegir color de fondo
         //TODO: Mejorar boton de cambiar imagen o frase
