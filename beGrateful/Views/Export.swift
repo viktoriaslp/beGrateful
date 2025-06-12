@@ -9,10 +9,12 @@ import SwiftUI
 
 struct Export: View {
     var body: some View {
-        Text("Save your gratitude in a PDF")
-        Text("some foto")
-        Text("Oldest to newest / Newest to oldest")
-        Text("Create PDF")
+        VStack {
+            Text("Save your gratitude in a PDF")
+            Text("some foto")
+            Text("Oldest to newest / Newest to oldest")
+            Text("Create PDF")
+        }
     }
 }
 

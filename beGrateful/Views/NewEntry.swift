@@ -96,10 +96,10 @@ struct NewEntry: View {
                                 memory = MemoryItem(date: Date(), text: "", quoteOfTheDay: true, emotion: .happy)
                             }
                         }
-                            .padding()
-                            .background(Color("forbuttons"))
-                            .foregroundColor(.white)
-                            .clipShape(Capsule())
+                        .padding()
+                        //.background(Color("forbuttons"))
+                        .foregroundColor(.primary)
+                        //.clipShape(Capsule())
                     }
                     .padding()
                 }

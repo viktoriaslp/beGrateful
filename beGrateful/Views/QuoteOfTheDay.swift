@@ -8,18 +8,13 @@
 import SwiftData
 import SwiftUI
 
-//struct QuoteOfTheDay: View {
-  //  var body: some View {
-   //     Text("Nice foto icon on top")
-     //   Text("Quote of the day choosed randomly from your gratitude journal")
+
     //    Text("Botones: Generate randomly new quote / Save it as a wallpaper or share it some social media")
    //     Text("the day was wrote")
 
-        
-//    }
-// }
 
 struct QuoteOfTheDay: View {
+    @Query(filter: #Predicate<MemoryItem> { $0.quoteOfTheDay }) var quotes: [MemoryItem]
     @State private var randomImage = ImageHelper.getRandomImage()
 
     var body: some View {
@@ -27,28 +22,52 @@ struct QuoteOfTheDay: View {
             Image(randomImage)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 200, height: 200)
+                .frame(maxWidth: .infinity)
                 .padding()
-
-            Text("Your motivational quote here")
-                .font(.title)
-                .padding()
-
-            HStack {
-                Button(action: {
-                    randomImage = ImageHelper.getRandomImage()
-                }) {
-                    Text("Nueva Imagen")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                }
-                // TODO: Añadir un boton de descarga
-            }
             
+            if let quote = quotes.randomElement() {
+                Text(quote.text)
+                    .font(.title3)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(radius: 4)
+                    .padding()
+            } else {
+                Text("No quotes available yet. Add some grateful memories!")
+                    .italic()
+                    .multilineTextAlignment(.center)
+                    .padding()
+            }
         }
+        
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                HStack {
+                    Button("New Quote") {
+                        // currentQuote = quotes.randomElement()
+                    }
+                    .padding()
+                    .background(Color("forbuttons"))
+                    .foregroundColor(.white)
+                    .clipShape(Capsule())
+                    
+                    Button("New Image") {
+                        randomImage = ImageHelper.getRandomImage()
+                    }
+                    .padding()
+                    .background(Color("forbuttons"))
+                    .foregroundColor(.white)
+                    .clipShape(Capsule())
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        // TODO: Añadir un boton de descarga
+        // TODO: Añadir boton para elegir color de fondo
+        //TODO: Mejorar boton de cambiar imagen o frase
+        
         .onAppear {
             randomImage = ImageHelper.getRandomImage()
         }
@@ -60,4 +79,5 @@ struct QuoteOfTheDay: View {
 
 #Preview {
     QuoteOfTheDay()
+        .modelContainer(for: MemoryItem.self)
 }

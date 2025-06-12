@@ -31,45 +31,50 @@ struct ContentView: View {
             }
 
             // MARK: - Barra personalizada
-            VStack {
-                Spacer()
-                HStack {
-                    // Home
-                    tabBarButton(image: "house.fill", text: "Home", tab: 0)
+            GeometryReader { geo in
+                
+                VStack {
                     Spacer()
-                    
-                    // Today
-                    tabBarButton(image: "quote.opening", text: "Today", tab: 1)
-                    Spacer()
-                    
-                    // Botón central (+)
-                    // TODO: hacer de esto una ventana emergente, no completamente nueva.
-                    Button {
-                         showingNewEntry = true
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 50))
-                            .foregroundColor(Color("forbuttons"))
-                            .shadow(radius: 4)
+                    HStack {
+                        // Home
+                        tabBarButton(image: "house.fill", text: "Home", tab: 0)
+                            .frame(width: geo.size.width / 6)
+                        // Today
+                        tabBarButton(image: "quote.opening", text: "Quote", tab: 1)
+                            .frame(width: geo.size.width / 6)
+                        
+                        // Botón central (+)
+                        // TODO: hacer de esto una ventana emergente, no completamente nueva.
+                        Button {
+                            showingNewEntry = true
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 60))
+                                .foregroundColor(Color("forbuttons"))
+                                .shadow(radius: 4)
+                            // Para hacer sobresalir boton con color de fondo
+                                .background(Color("mybackground")) // si quieres redondear la base
+                                .clipShape(Circle())
+                                .offset(y: -30)
+                        }
+                        // .offset(y: -20)
+                        .frame(width: geo.size.width / 6)
+                        .sheet(isPresented: $showingNewEntry) {
+                            NewEntry()
+                                .interactiveDismissDisabled(true)
+                        }
+                        
+                        // Memories
+                        tabBarButton(image: "archivebox.fill", text: "Memories", tab: 3)
+                            .frame(width: geo.size.width / 6)
+                        
+                        // PDF
+                        tabBarButton(image: "arrow.down.doc.fill", text: "PDF", tab: 4)
+                            .frame(width: geo.size.width / 6)
                     }
-                    .offset(y: -20)
-                    .sheet(isPresented: $showingNewEntry) {
-                        NewEntry()
-                    }
-                    
-                    Spacer()
-                    
-                    // Memories
-                    tabBarButton(image: "archivebox.fill", text: "MemoriesList", tab: 3)
-                    Spacer()
-                    
-                    // PDF
-                    tabBarButton(image: "arrow.down.doc.fill", text: "PDF", tab: 4)
+                    .padding(.horizontal)
+                    .background(Color("mybackground").ignoresSafeArea(edges: .bottom))
                 }
-                .padding(.horizontal)
-                .padding(.top, 10)
-                .padding(.bottom, 20)
-                .background(Color("mybackground").ignoresSafeArea(edges: .bottom))
             }
         }
     }
