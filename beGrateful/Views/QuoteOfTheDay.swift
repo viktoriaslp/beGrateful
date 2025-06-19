@@ -15,6 +15,9 @@ import SwiftUI
 
 struct QuoteOfTheDay: View {
     @Query(filter: #Predicate<MemoryItem> { $0.quoteOfTheDay }) var quotes: [MemoryItem]
+    
+    @Binding var showingNewEntry: Bool
+
     @State private var randomImage = ImageHelper.getRandomImage()
 
     var body: some View {
@@ -25,18 +28,16 @@ struct QuoteOfTheDay: View {
                 .frame(maxWidth: .infinity)
                 .padding()
             
-            if let quote = quotes.randomElement() {
+            if let quote = quotes.randomElement(), !quote.text.isEmpty {
                 Text(quote.text)
                     .font(.title3)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Color("fortexts"))
                     .padding()
-                
             } else {
-                Text("No quotes available yet. Add some grateful memories!")
-                    .italic()
-                    .multilineTextAlignment(.center)
-                    .padding()
+                EmptyStateView {
+                    showingNewEntry = true
+                }
             }
         }
         .padding(.bottom, 60)
@@ -78,6 +79,6 @@ struct QuoteOfTheDay: View {
 }
 
 #Preview {
-    QuoteOfTheDay()
+    QuoteOfTheDay(showingNewEntry: .constant(false))
         .modelContainer(for: MemoryItem.self)
 }

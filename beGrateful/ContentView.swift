@@ -19,11 +19,11 @@ struct ContentView: View {
             case 0:
                 Home()
             case 1:
-                QuoteOfTheDay()
+                QuoteOfTheDay(showingNewEntry: $showingNewEntry)
             case 2:
                 NewEntry()
             case 3:
-                MemoriesList()
+                MemoriesList(showingNewEntry: $showingNewEntry)
             case 4:
                 Export()
             default:
