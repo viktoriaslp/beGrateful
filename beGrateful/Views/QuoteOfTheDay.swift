@@ -34,6 +34,13 @@ struct QuoteOfTheDay: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(Color("fortexts"))
                     .padding()
+                ShareLink(item: quote.text) {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                        .padding()
+                        .background(Color("forbuttons"))
+                        .foregroundColor(.white)
+                        .clipShape(Capsule())
+                }
             } else {
                 EmptyStateView {
                     showingNewEntry = true

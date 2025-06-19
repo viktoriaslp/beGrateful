@@ -5,10 +5,14 @@
 //  Created by Victoria Slyunko on 14.03.2025.
 //
 
+import StoreKit
 import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("memoriesCount") var memoriesCount = 0
+    @Environment(\.requestReview) var requestReview
+    
     @State private var selectedTab = 0 // Comienza en Home
     @State private var showingNewEntry = false // controlar si el sheet está abierto
 
@@ -74,6 +78,11 @@ struct ContentView: View {
                     }
                     .padding(.horizontal)
                     .background(Color("mybackground").ignoresSafeArea(edges: .bottom))
+                    .onChange(of: memoriesCount) { oldValue, newValue in
+                        if newValue == 5 {
+                            requestReview()
+                        }
+                    }
                 }
             }
         }

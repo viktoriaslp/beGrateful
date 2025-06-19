@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct NewEntry: View {
-        
+    @AppStorage("memoriesCount") var memoriesCount = 0
     
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -94,6 +94,7 @@ struct NewEntry: View {
                                 modelContext.insert(memory)
                                 showSuccessAlert = true
                                 memory = MemoryItem(date: Date(), text: "", quoteOfTheDay: true, emotion: .happy)
+                                memoriesCount += 1
                             }
                         }
                         .padding()
