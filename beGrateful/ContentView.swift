@@ -13,8 +13,11 @@ struct ContentView: View {
     @AppStorage("memoriesCount") var memoriesCount = 0
     @Environment(\.requestReview) var requestReview
     
+    
     @State private var selectedTab = 0 // Comienza en Home
     @State private var showingNewEntry = false // controlar si el sheet está abierto
+    @State private var canDismissNewEntry = true
+
 
     var body: some View {
         ZStack {
@@ -25,13 +28,13 @@ struct ContentView: View {
             case 1:
                 QuoteOfTheDay(showingNewEntry: $showingNewEntry)
             case 2:
-                NewEntry()
+                NewEntry(canDismiss: $canDismissNewEntry)
             case 3:
                 MemoriesList(showingNewEntry: $showingNewEntry)
             case 4:
                 Export()
             default:
-                NewEntry()
+                NewEntry(canDismiss: $canDismissNewEntry)
             }
 
             // MARK: - Barra personalizada
@@ -48,8 +51,8 @@ struct ContentView: View {
                             .frame(width: geo.size.width / 6)
                         
                         // Botón central (+)
-                        // TODO: hacer de esto una ventana emergente, no completamente nueva.
                         Button {
+                            canDismissNewEntry = true
                             showingNewEntry = true
                         } label: {
                             Image(systemName: "plus.circle.fill")
@@ -64,8 +67,8 @@ struct ContentView: View {
                         // .offset(y: -20)
                         .frame(width: geo.size.width / 6)
                         .sheet(isPresented: $showingNewEntry) {
-                            NewEntry()
-                                .interactiveDismissDisabled(true)
+                            NewEntry(canDismiss: $canDismissNewEntry)
+                                    .interactiveDismissDisabled(!canDismissNewEntry)
                         }
                         
                         // Memories
@@ -78,6 +81,7 @@ struct ContentView: View {
                     }
                     .padding(.horizontal)
                     .background(Color("mybackground").ignoresSafeArea(edges: .bottom))
+                    // Review request
                     .onChange(of: memoriesCount) { oldValue, newValue in
                         if newValue == 5 {
                             requestReview()

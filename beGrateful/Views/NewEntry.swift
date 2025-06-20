@@ -13,6 +13,8 @@ struct NewEntry: View {
     
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    
+    @Binding var canDismiss: Bool
 
     // MARK: - Modelo temporal para crear una memoria
     @State var memory = MemoryItem(
@@ -44,6 +46,9 @@ struct NewEntry: View {
                 Section {
                     TextEditor(text: $memory.text)
                         .frame(height: 200)
+                        .onChange(of: memory.text) { oldValue, newValue in
+                            canDismiss = newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        }
 
                 } header: {
                     Text("What are you grateful for tooday?")
@@ -78,31 +83,28 @@ struct NewEntry: View {
             
             // MARK: - Barra inferior con botones
             .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        // Cancelar
-                        Button("Cancel", role: .destructive) {
-                            showCancelAlert = true
+                ToolbarItem(placement: .confirmationAction) {
+                    // Cancelar
+                    Button("Cancel", role: .destructive) {
+                        showCancelAlert = true
+                    }
+                    .foregroundStyle(.red)
+                }
+                
+                ToolbarItem(placement: .cancellationAction) {
+                    // Guardar
+                    Button("Save") {
+                        if memory.text.isEmpty {
+                                showErrorAlert = true
+                        } else {
+                            modelContext.insert(memory)
+                            showSuccessAlert = true
+                            memory = MemoryItem(date: Date(), text: "", quoteOfTheDay: true, emotion: .happy)
+                            memoriesCount += 1
                         }
-                            .foregroundStyle(.red)
-                        Spacer()
-                        // Guardar
-                        Button("Save") {
-                            if memory.text.isEmpty {
-                                    showErrorAlert = true
-                            } else {
-                                modelContext.insert(memory)
-                                showSuccessAlert = true
-                                memory = MemoryItem(date: Date(), text: "", quoteOfTheDay: true, emotion: .happy)
-                                memoriesCount += 1
-                            }
-                        }
-                        .padding()
-                        //.background(Color("forbuttons"))
-                        .foregroundColor(.primary)
-                        //.clipShape(Capsule())
                     }
                     .padding()
+                    .foregroundColor(Color("fortexts"))
                 }
             }
             // MARK: - Alertas
@@ -128,6 +130,6 @@ struct NewEntry: View {
 }
 
 #Preview {
-    NewEntry()
+    NewEntry(canDismiss: .constant(true))
         .modelContainer(for: MemoryItem.self)
 }

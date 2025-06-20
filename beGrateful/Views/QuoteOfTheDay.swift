@@ -4,84 +4,84 @@
 //
 //  Created by Victoria Slyunko on 14.03.2025.
 //
+// View that displays a random background image and a gratitude quote marked as 'quoteOfTheDay'.
+
 
 import SwiftData
 import SwiftUI
 
-
-    //    Text("Botones: Generate randomly new quote / Save it as a wallpaper or share it some social media")
-   //     Text("the day was wrote")
-
-
 struct QuoteOfTheDay: View {
+    // Fetches all memory entries where 'quoteOfTheDay' is true
     @Query(filter: #Predicate<MemoryItem> { $0.quoteOfTheDay }) var quotes: [MemoryItem]
     
     @Binding var showingNewEntry: Bool
-
+    
+    // Holds a randomly selected image
     @State private var randomImage = ImageHelper.getRandomImage()
 
     var body: some View {
-        VStack {
-            Image(randomImage)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-                .padding()
-            
-            if let quote = quotes.randomElement(), !quote.text.isEmpty {
-                Text(quote.text)
-                    .font(.title3)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color("fortexts"))
+        NavigationStack {
+            VStack {
+                Spacer()
+                // Decorative image shown at the top
+                Image(randomImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity)
                     .padding()
-                ShareLink(item: quote.text) {
-                    Label("Share", systemImage: "square.and.arrow.up")
+                
+                // If there's at least one quote available, display it
+                if let quote = quotes.randomElement(), !quote.text.isEmpty {
+                    Text(quote.text)
+                        .font(.title3)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color("fortexts"))
                         .padding()
-                        .background(Color("forbuttons"))
-                        .foregroundColor(.white)
-                        .clipShape(Capsule())
+                // If no quotes are available, show a custom empty state with an option to add one
+                } else {
+                    EmptyStateView {
+                        showingNewEntry = true
+                    }
                 }
-            } else {
-                EmptyStateView {
-                    showingNewEntry = true
+                Spacer()
+                Spacer()
+            }
+            .padding(.bottom, 60)
+            .toolbar {
+                // TODO: Improve the UI/UX for switching quotes or images
+                ToolbarItem(placement: .topBarLeading) {
+                    HStack {
+                        Button("New Quote") {
+                            // currentQuote = quotes.randomElement()
+                        }
+                        
+                        Button("New Image") {
+                            randomImage = ImageHelper.getRandomImage()
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                // TODO: Save it as a wallpaper or share it some social media.
+                // Share button to export the quote to other apps or social media
+                ToolbarItem(placement: .topBarTrailing) {
+                    ShareLink(item: "Test") {
+                        Label("Share", systemImage: "square.and.arrow.up")
+                            .padding()
+                            .background(Color("forbuttons"))
+                            .foregroundColor(.white)
+                            .clipShape(Capsule())
+                    }
                 }
             }
+            Spacer()
         }
-        .padding(.bottom, 60)
         
-        //.toolbar {
-        //    ToolbarItem(placement: .bottomBar) {
-        //        HStack {
-        //            Button("New Quote") {
-        //                // currentQuote = quotes.randomElement()
-        //            }
-        //            .padding()
-        //            .background(Color("forbuttons"))
-        //            .foregroundColor(.white)
-        //            .clipShape(Capsule())
-                    
-        //            Button("New Image") {
-        //                randomImage = ImageHelper.getRandomImage()
-        //            }
-        //            .padding()
-        //            .background(Color("forbuttons"))
-        //            .foregroundColor(.white)
-        //            .clipShape(Capsule())
-        //        }
-        //        .frame(maxWidth: .infinity)
-        //    }
-        //}
+        // TODO: Add a button to let users pick a background color manually
         
-        // TODO: Añadir un boton de descarga
-        // TODO: Añadir boton para elegir color de fondo
-        //TODO: Mejorar boton de cambiar imagen o frase
-        
+        // Loads a new random image every time the view appears
         .onAppear {
             randomImage = ImageHelper.getRandomImage()
         }
-        
-        // TODO: que la barra desaparezca al tocar pantalla
-
     }
 }
 
